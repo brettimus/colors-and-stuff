@@ -189,7 +189,7 @@ function geneticAlgorithm() {
             ),
             createFitnessWrapper(
                 breedPalettes(state[4].palette, state[5].palette)
-            ),
+            )
         );
 
         // mutate one from top six
