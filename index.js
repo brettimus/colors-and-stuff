@@ -71,10 +71,10 @@ var createHSL = (function() {
 
     // Comparison
     HSL.prototype.distanceFrom = function(c) {
-        // We want the shortest secant
-        var secant1 = this.validateHue(this.hue() - c.hue());
-        if (secant1 <= 180) return secant1;
-        else return this.validateHue(c.hue() - this.hue());
+        // We want the minimum angle between the hues
+        var angle = this.validateHue(this.hue() - c.hue());
+        if (angle < 180) return angle;
+        return this.validateHue(c.hue() - this.hue())
     }
 
 
@@ -289,7 +289,7 @@ function geneticAlgorithm() {
     }
 
     function calculatePaletteFitness(p) {
-        // Uses the squared shortest secant along color wheel
+        // Uses the squared minimum angle between two colors's hues on the color wheel
         if (typeof p.colors !== "function") debugger;
         var colors = p.colors();
         var c1 = colors[0];
