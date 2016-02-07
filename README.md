@@ -1,7 +1,9 @@
-# :art: :sparkles: :bug: genetic colors
+# :art: :heavy_plus_sign: :genetic_algorithm: 
+_[View the demo!](http://brettim.us/genetic-colors/)_
+
 :warning: **Under Construction!**
 
-The goal is to use a genetic algorithm to create aesthetically pleasing color palettes.
+The goal is to use a genetic algorithm to create aesthetically pleasing color palettes. At present, we only evolve two complementary colors.
 
 ## The Algorithm
 
@@ -41,17 +43,19 @@ Fitness is calculated as the minimum squared secant between two hues, which make
 This just returns `false` right now :grin:.
 
 ### Visualizing the algorithm
-Currently, we only visualize the most fit palette.
+Currently, we only visualize the “most fit” palette once the algorithm is finished.
 
-I've only written one of the building blocks for this, which you can find in the `createPanel` function.
+I would really love to visualize the evolution of a color palette. I have two ideas on how to do this (listed below). I am more partial to trying Idea 1 first, and then possibly incorporating the idea of `#tick` method later. Now I'm just rambling. :coffee:
 
-## todo
-Define the following:
-- steady state
-- ~mutation~
-- ~breeding~
-- fitness
+#### Idea 1: A state queue
+Keep a record (probs a queue) of the algorithm's state at the beginning of its main loop.
 
-Improve the following:
-- mutation
-- breeding
+We can then use that queue to animate the evolution of our colors. 
+
+#### Idea 2: Asynchronous processing
+Asynchronously step through genetic algorithm. 
+
+Abstract the genetic algorithm into an object that contains both the state of the algorithm and a `#tick`-like method (which simply runs through steps 2-6 of the algorithm). Then, we can space out each `tick` by a set amount of time, and we visualize the state of the algorithm after each call to `tick`. 
+
+## Get in touch!
+I'd love to talk to someone about how to make a robust fitness function for this.
