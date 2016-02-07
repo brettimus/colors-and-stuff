@@ -82,8 +82,61 @@ var createHSL = (function() {
         return createHSL(h, s, l);
     }
 
+    createHSL.mix = function(c1, c2) {
+        // Averages each value
+        var h = (c1.hue() + c2.hue()) / 2;
+        var s = (c1.saturation() + c2.saturation()) / 2;
+        var l = (c1.lightness() + c2.lightness()) / 2;
+        return createHSL(h, s, l);
+    }
+
     return createHSL;
 })();
+
+var createPalette = (function(createColor) {
+    function Palette(colors) {
+        this.colors(colors);
+    }
+
+    // Regardless of input or internal state, this should return array of colors
+    Palette.prototype.colors = function(colors) {
+        if (!arguments.length) return this._colors;
+        this._colors = colors;
+        return this;
+    }
+
+    Palette.prototype.eachColor = function(f) {
+        this._colors.forEach(function(color, index) {
+            f(color, index);
+        }, this);
+    }
+
+    function createPalette(colors) {
+        return new Palette(colors);
+    }
+
+    createPalette.random = function(n) {
+        var i = n || 3,
+            randomColors = [];
+        while (i--) randomColors.push(createColor.random());
+        return createPalette(randomColors);
+    }
+
+    createPalette.mix = function(p1, p2) {
+        var colors1 = p1.colors();
+        var colors2 = p2.colors();
+
+        if (colors1.length !== colors2.length)
+            throw new Error("Cannot mix palettes of unequal size.")
+
+        return colors1.map(function(c1, i) {
+            var c2 = colors2[i];
+            return createColor.mix(c1, c2);
+        });
+    }
+
+    return createPalette;
+})(createHSL);
 
 
 var createPanel = (function() {
@@ -137,38 +190,11 @@ var createPanel = (function() {
     }
 })();
 
-var createPalette = (function(createColor) {
-    function Palette(colors) {
-        this.colors(colors);
-    }
-
-    Palette.prototype.colors = function(colors) {
-        if (!arguments.length) return this._colors;
-        this._colors = colors;
-        return this;
-    }
-
-    function createPalette(colors) {
-        return new Palette(colors);
-    }
-
-    createPalette.random = function(n) {
-        var i = n || 3,
-            randomColors = [];
-        while (i--) randomColors.push(createColor.random());
-        return createPalette(randomColors);
-    }
-
-    createPalette.mix = function(p1, p2) {
-
-    }
-
-    return createPalette;
-})(createHSL);
-
 function geneticAlgorithm() {
 
-    var state = getInitialState(10).map(createFitnessWrapper).sort(byFitnessDescending); // A collection of palettes
+    var state = getInitialState(10)
+                .map(createFitnessWrapper)
+                .sort(byFitnessDescending); // A collection of palettes
 
     var LOOP_COUNT = 0;
     var MAX_LOOPS = 1000;
@@ -192,7 +218,7 @@ function geneticAlgorithm() {
             )
         );
 
-        // mutate one from top six
+        // mutate one palette from top six
         TOP_SIX_RAND = Math.floor(Math.random()*6);
         state.push(
             createFitnessWrapper(
@@ -200,7 +226,7 @@ function geneticAlgorithm() {
             )
         );
 
-        // mutate one from bottom four
+        // mutate one palette from bottom four
         BOTTOM_FOUR_RAND = 10 - Math.ceil(Math.random()*4);
         state.push(
             createFitnessWrapper(
@@ -237,16 +263,21 @@ function geneticAlgorithm() {
     }
 
     function isSteadyState() {
-        console.log("%cRunning dummy version of #isSteadyState", "color: deeppink; font-weight: 700; font-size: 135%;");
+        printDummyMethodWarning("Running dummy version of #isSteadyState");
         return false;
     }
 
     function mutatePalette() {
+        printDummyMethodWarning("Running dummy version of #mutatePalette");
         throw new Error("NYI");
     }
 
     function breedPalettes(p1, p2) {
         return createPalette.mix(p1, p2);
+    }
+
+    function printDummyMethodWarning(message) {
+        console.log("[Warning] %c" + message, "color: deeppink; font-weight: 700; font-size: 135%;");
     }
 }
 
