@@ -71,9 +71,18 @@ var createHSL = (function() {
 
 
     // Public interface
-    return function createHSL(h, s, l) {
+    function createHSL(h, s, l) {
         return new HSL(h, s, l);
     }
+
+    createHSL.random = function() {
+        var h = Math.floor(Math.random()*360);
+        var s = Math.floor(Math.random()*101);
+        var l = Math.floor(Math.random()*101);
+        return createHSL(h, s, l);
+    }
+
+    return createHSL;
 })();
 
 
@@ -127,6 +136,7 @@ var createPanel = (function() {
         return new Panel(options);
     }
 })();
+
 
 function mutateHSL(hsl) {
     throw new Error("NYI");
