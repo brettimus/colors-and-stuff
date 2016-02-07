@@ -137,17 +137,128 @@ var createPanel = (function() {
     }
 })();
 
+var createPalette = (function(createColor) {
+    function Palette(colors) {
+        this.colors(colors);
+    }
 
-function mutateHSL(hsl) {
-    throw new Error("NYI");
+    Palette.prototype.colors = function(colors) {
+        if (!arguments.length) return this._colors;
+        this._colors = colors;
+        return this;
+    }
+
+    function createPalette(colors) {
+        return new Palette(colors);
+    }
+
+    createPalette.random = function(n) {
+        var i = n || 3,
+            randomColors = [];
+        while (i--) randomColors.push(createColor.random());
+        return createPalette(randomColors);
+    }
+
+    createPalette.mix = function(p1, p2) {
+
+    }
+
+    return createPalette;
+})(createHSL);
+
+function geneticAlgorithm() {
+
+    var state = getInitialState(10).map(createFitnessWrapper).sort(byFitnessDescending); // A collection of palettes
+
+    var LOOP_COUNT = 0;
+    var MAX_LOOPS = 1000;
+    var NEXT_GEN = [];
+
+    var TOP_SIX_RAND;
+    var BOTTOM_FOUR_RAND;
+
+    while (!isSteadyState(state) && !(LOOP_COUNT > MAX_LOOPS)) {
+
+        // breed top six
+        state.push(
+            createFitnessWrapper(
+                breedPalettes(state[0].palette, state[1].palette)
+            ),
+            createFitnessWrapper(
+                breedPalettes(state[2].palette, state[3].palette)
+            ),
+            createFitnessWrapper(
+                breedPalettes(state[4].palette, state[5].palette)
+            ),
+        );
+
+        // mutate one from top six
+        TOP_SIX_RAND = Math.floor(Math.random()*6);
+        state.push(
+            createFitnessWrapper(
+                mutatePalette(state[TOP_SIX_RAND].palette)
+            )
+        );
+
+        // mutate one from bottom four
+        BOTTOM_FOUR_RAND = 10 - Math.ceil(Math.random()*4);
+        state.push(
+            createFitnessWrapper(
+                mutatePalette(state[BOTTOM_FOUR_RAND].palette)
+            )
+        );
+
+        // Chop off the least fitting members of this generation
+        state.sort(byFitnessDescending).slice(0, 10);
+
+        LOOP_COUNT++;
+    }
+
+    function getInitialState(N) {
+       var i = N;
+       var palettes = [];
+       while (i--) palettes.push(createPalette.random());
+       return palettes;
+    }
+
+    function createFitnessWrapper(p) {
+        return {
+            fitness: calculatePaletteFitness(p),
+            palette: p,
+        };
+    }
+
+    function byFitnessDescending(p1, p2) {
+        return p2.fitness - p1.fitness;   
+    }
+
+    function calculatePaletteFitness() {
+        throw new Error("NYI");
+    }
+
+    function isSteadyState() {
+        console.log("%cRunning dummy version of #isSteadyState", "color: deeppink; font-weight: 700; font-size: 135%;");
+        return false;
+    }
+
+    function mutatePalette() {
+        throw new Error("NYI");
+    }
+
+    function breedPalettes(p1, p2) {
+        return createPalette.mix(p1, p2);
+    }
 }
 
+
+
+
 // *** main *** //
-if (typeof window === "undefined") __tests();
-else __do_it();
+if (typeof window === "undefined") __console_tests();
+else __document_tests();
 // ************ //
 
-function __do_it() {
+function __document_tests() {
 
     var opal = createHSL(154.29, 25.93, 73.53);
     var celtic = createHSL(160, 18, 19.61);
@@ -175,7 +286,7 @@ function __do_it() {
 
 
 // Test
-function __tests() {
+function __console_tests() {
     var blanketColors = [
         createHSL(154.29, 25.93, 73.53), // opal
         createHSL(167.5, 19.05, 50.59), // gumbo
