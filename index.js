@@ -38,29 +38,31 @@ var createHSL = (function() {
 
     // Validation
     HSL.prototype.validateHue = function(hue) {
-        this._numbersOnly(hue);
+        this._numbersOnly(hue, "hue");
         while (hue < 0) hue += 360;
         return hue % 360;
     }
 
     HSL.prototype.validateSaturation = function(saturation) {
-        return this.validatePercent(saturation);
+        return this.validatePercent(saturation, "saturation");
     }
 
     HSL.prototype.validateLightness = function(lightness) {
-        return this.validatePercent(lightness);
+        return this.validatePercent(lightness, "lightness");
     }
 
-    HSL.prototype.validatePercent = function(p) {
-        this._numbersOnly(p);
+    HSL.prototype.validatePercent = function(p, name) {
+        this._numbersOnly(p, name);
         if (p < 0) return 0;
         if (p > 100) return 100;
         return p;
     }
 
-    HSL.prototype._numbersOnly = function(n) {
+    HSL.prototype._numbersOnly = function(n, name) {
+        if (name === undefined) name = "";
+        var message = "[HSL input error] " + name + " must be a number";
         if (typeof n !== "number")
-            throw new Error("Hue must be a number");
+            throw new Error(message);
     }
 
 
