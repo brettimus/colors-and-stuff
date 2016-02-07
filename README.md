@@ -16,7 +16,7 @@ The goal is to use a genetic algorithm to create aesthetically pleasing color pa
 ### Current Assumptions
 * A palette is two colors
 * Each color is HSL
-* Fitness is according to complementary colors 
+* Fitness is minimum squared secant between two hues (effectively selecting complementary colors)
 
 ### Breeding
 **:disappointed: Needs improvement!** 
@@ -33,12 +33,16 @@ Right now, mutation simply generates a new, random palette. Clearly, this could 
 (The `createPalette` construction has a static `#random` method, which uses the `#random` method on `createColor`.)
 
 ### Fitness
-:warning: **Todo** :warning:
+Fitness is calculated as the minimum squared secant between two hues, which makes our algorithm evolve towards complementary colors. 
 
 ### The Steady State
 :warning: **Todo** :warning:
 
+This just returns `false` right now :grin:.
+
 ### Visualizing the algorithm
+Currently, we only visualize the most fit palette.
+
 I've only written one of the building blocks for this, which you can find in the `createPanel` function.
 
 ## todo

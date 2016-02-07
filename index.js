@@ -69,6 +69,15 @@ var createHSL = (function() {
     }
 
 
+    // Comparison
+    HSL.prototype.distanceFrom = function(c) {
+        // We want the shortest secant
+        var secant1 = this.validateHue(this.hue() - c.hue());
+        if (secant1 <= 180) return secant1;
+        else return this.validateHue(c.hue() - this.hue());
+    }
+
+
     // Serialization
     HSL.prototype.toString = function() {
         return "hsl(" + [this.hue(), this.saturation() + "%", this.lightness() + "%"] + ")";
@@ -135,10 +144,12 @@ var createPalette = (function(createColor) {
         if (colors1.length !== colors2.length)
             throw new Error("Cannot mix palettes of unequal size.")
 
-        return colors1.map(function(c1, i) {
+        var newColors = colors1.map(function(c1, i) {
             var c2 = colors2[i];
             return createColor.mix(c1, c2);
         });
+
+        return createPalette(newColors);
     }
 
     return createPalette;
@@ -203,16 +214,45 @@ function geneticAlgorithm() {
                 .sort(byFitnessDescending); // A collection of palettes
 
     var LOOP_COUNT = 0;
-    var MAX_LOOPS = 1000;
-    var NEXT_GEN = [];
+    var MAX_LOOPS = 100;
 
-    var TOP_SIX_RAND;
-    var BOTTOM_FOUR_RAND;
-
-    while (!isSteadyState(state) && !(LOOP_COUNT > MAX_LOOPS)) {
+    while (!isSteady(state) && !(LOOP_COUNT >= MAX_LOOPS)) {
 
         // breed top six
-        state.push(
+        state.push.apply(state, breedTopSix(state));
+
+        // mutate one palette from top six
+        state.push(randomlyMutateOne(state.slice(0, 6)));
+
+        // mutate one palette from bottom four
+        state.push(randomlyMutateOne(state.slice(6, 10)));
+
+        // Chop off the least fitting members of this generation
+        state = state.sort(byFitnessDescending).slice(0, 10);
+
+        LOOP_COUNT++;
+    }
+
+
+    console.log("Loop count:", LOOP_COUNT);
+    console.log("Top palette:", state[0].palette);
+
+    visualize(state);
+
+
+    function visualize(state) {
+        var colors = state[0].palette.colors();
+        var transition = "background 200ms ease-in-out";
+        var elts = document.querySelectorAll("li");
+        var panel1 = createPanel({ color: colors[0], element: elts[0], transition: transition });
+        var panel2 = createPanel({ color: colors[1], element: elts[1], transition: transition });
+
+        panel1.draw();
+        panel2.draw();
+    }
+
+    function breedTopSix(state) {
+        return [
             createFitnessWrapper(
                 breedPalettes(state[0].palette, state[1].palette)
             ),
@@ -221,29 +261,13 @@ function geneticAlgorithm() {
             ),
             createFitnessWrapper(
                 breedPalettes(state[4].palette, state[5].palette)
-            )
-        );
+            ),
+        ];
+    }
 
-        // mutate one palette from top six
-        TOP_SIX_RAND = Math.floor(Math.random()*6);
-        state.push(
-            createFitnessWrapper(
-                mutatePalette(state[TOP_SIX_RAND].palette)
-            )
-        );
-
-        // mutate one palette from bottom four
-        BOTTOM_FOUR_RAND = 10 - Math.ceil(Math.random()*4);
-        state.push(
-            createFitnessWrapper(
-                mutatePalette(state[BOTTOM_FOUR_RAND].palette)
-            )
-        );
-
-        // Chop off the least fitting members of this generation
-        state.sort(byFitnessDescending).slice(0, 10);
-
-        LOOP_COUNT++;
+    function randomlyMutateOne(state) {
+        var i = Math.floor(Math.random() * state.length);
+        return createFitnessWrapper(mutatePalette(state[i].palette))
     }
 
     function getInitialState(N) {
@@ -265,19 +289,22 @@ function geneticAlgorithm() {
     }
 
     function calculatePaletteFitness(p) {
+        // Uses the squared shortest secant along color wheel
+        if (typeof p.colors !== "function") debugger;
         var colors = p.colors();
-
-        throw new Error("NYI");
+        var c1 = colors[0];
+        var c2 = colors[1];
+        return Math.pow(c1.distanceFrom(c2), 2);
     }
 
-    function isSteadyState() {
+    function isSteady(state) {
         printDummyMethodWarning("Running dummy version of #isSteadyState");
         return false;
     }
 
-    function mutatePalette() {
+    function mutatePalette(p) {
         printDummyMethodWarning("Running dummy version of #mutatePalette");
-        throw new Error("NYI");
+        return createPalette.random();
     }
 
     function breedPalettes(p1, p2) {
@@ -290,39 +317,17 @@ function geneticAlgorithm() {
 }
 
 
-
-
 // *** main *** //
 if (typeof window === "undefined") __console_tests();
-else __document_tests();
+else __browser_tests();
 // ************ //
 
-function __document_tests() {
 
-    var opal = createHSL(154.29, 25.93, 73.53);
-    var celtic = createHSL(160, 18, 19.61);
-    var white = createHSL(0, 0, 100);
-    var black = createHSL(0, 0, 0);
-
-    var transition = "background 200ms ease-in-out";
-
-    var elts = document.querySelectorAll("li");
-    var panel1 = createPanel({ color: celtic, element: elts[0], transition: transition });
-    var panel2 = createPanel({ color: opal, element: elts[1], transition: transition });
-    var panel3 = createPanel({ color: black, element: elts[2], transition: transition });
-
-    function tick() {
-        var panel1Color = panel1.color();
-        panel1.color(panel2.color()).draw();
-        panel2.color(panel3.color()).draw();
-        panel3.color(panel1Color).draw();
-    }
-
-    setTimeout(tick, 100);
-    setTimeout(tick, 600);
-    document.body.addEventListener("click", tick);
+function __browser_tests() {
+    document.body.addEventListener("click", geneticAlgorithm);
+    document.body.addEventListener("touchend", geneticAlgorithm);
+    setTimeout(geneticAlgorithm, 600);
 }
-
 
 // Test
 function __console_tests() {
