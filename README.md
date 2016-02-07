@@ -14,8 +14,9 @@ The goal is to use a genetic algorithm to create aesthetically pleasing color pa
 7. Repeat 2-6 until steady state is reached
 
 ### Current Assumptions
-* A palette is three colors
-* Each color is HSL 
+* A palette is two colors
+* Each color is HSL
+* Fitness is according to complementary colors 
 
 ### Breeding
 **:disappointed: Needs improvement!** 

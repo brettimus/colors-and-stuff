@@ -1,8 +1,11 @@
-
+// *** Hello! *** //
+// * 
+// * Welcome to the code.
+// * 
+// *
+// *** Goodbye! *** //
 
 var createHSL = (function() {
-    // Abstraction of a color 
-
     function HSL(h, s, l) {
         this.hue(h)
             .saturation(s)
@@ -100,7 +103,8 @@ var createPalette = (function(createColor) {
         this.colors(colors);
     }
 
-    // Regardless of input or internal state, this should return array of colors
+    // The getter should return an array of colors 
+    // (Static methods depend on that)
     Palette.prototype.colors = function(colors) {
         if (!arguments.length) return this._colors;
         this._colors = colors;
@@ -118,7 +122,7 @@ var createPalette = (function(createColor) {
     }
 
     createPalette.random = function(n) {
-        var i = n || 3,
+        var i = n || 2, // default to two random colors
             randomColors = [];
         while (i--) randomColors.push(createColor.random());
         return createPalette(randomColors);
@@ -260,7 +264,9 @@ function geneticAlgorithm() {
         return p2.fitness - p1.fitness;   
     }
 
-    function calculatePaletteFitness() {
+    function calculatePaletteFitness(p) {
+        var colors = p.colors();
+
         throw new Error("NYI");
     }
 
