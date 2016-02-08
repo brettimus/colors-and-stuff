@@ -20,7 +20,6 @@ var createHSL = (function() {
     }
     HSL.prototype.h = HSL.prototype.hue;
 
-
     HSL.prototype.saturation = function(s) {
         if (!arguments.length) return this._s;
         this._s = this.validateSaturation(s);
@@ -34,7 +33,6 @@ var createHSL = (function() {
         this._l = this.validateLightness(l);
         return this;
     }
-
     HSL.prototype.lit = HSL.prototype.lightness;
     HSL.prototype.l = HSL.prototype.lightness;
 
@@ -120,12 +118,6 @@ var createPalette = (function(createColor) {
         return this;
     }
 
-    Palette.prototype.eachColor = function(f) {
-        this._colors.forEach(function(color, index) {
-            f(color, index);
-        }, this);
-    }
-
     function createPalette(colors) {
         return new Palette(colors);
     }
@@ -188,6 +180,7 @@ var createPanel = (function() {
         return this;
     }
 
+
     // Actions
     Panel.prototype.draw = function() {
         var elt = this.element();
@@ -213,32 +206,31 @@ function geneticAlgorithm() {
                 .map(createFitnessWrapper)
                 .sort(byFitnessDescending); // A collection of palettes
 
-    var LOOP_COUNT = 0;
-    var MAX_LOOPS = 100;
-
-    while (!isSteady(state) && !(LOOP_COUNT >= MAX_LOOPS)) {
-
-        // breed top six
-        state.push.apply(state, breedTopSix(state));
-
-        // mutate one palette from top six
-        state.push(randomlyMutateOne(state.slice(0, 6)));
-
-        // mutate one palette from bottom four
-        state.push(randomlyMutateOne(state.slice(6, 10)));
-
-        // Chop off the least fitting members of this generation
-        state = state.sort(byFitnessDescending).slice(0, 10);
-
-        LOOP_COUNT++;
-    }
-
-
-    console.log("Loop count:", LOOP_COUNT);
-    console.log("Top palette:", state[0].palette);
-
+    evolve(state);
     visualize(state);
 
+    function evolve(state) {
+        var LOOP_COUNT = 0;
+        var MAX_LOOPS = 123;
+        while (!isSteady(state) && !(LOOP_COUNT >= MAX_LOOPS)) {
+
+            // breed top six
+            state.push.apply(state, breedTopSix(state));
+
+            // mutate one palette from top six
+            state.push(randomlyMutateOne(state.slice(0, 6)));
+
+            // mutate one palette from bottom four
+            state.push(randomlyMutateOne(state.slice(6, 10)));
+
+            // Chop off the least fitting members of this generation
+            state = state.sort(byFitnessDescending).slice(0, 10);
+
+            LOOP_COUNT++;
+        }
+        console.log("Loop count:", LOOP_COUNT);
+        console.log("Top palette:", state[0].palette);
+    }
 
     function visualize(state) {
         var colors = state[0].palette.colors();
@@ -318,7 +310,9 @@ function geneticAlgorithm() {
 
 
 // *** main *** //
-if (typeof window === "undefined") __console_tests();
+if (typeof window === "undefined") {
+    require("./test")();
+}
 else __browser_tests();
 // ************ //
 
@@ -326,31 +320,5 @@ else __browser_tests();
 function __browser_tests() {
     document.body.addEventListener("click", geneticAlgorithm);
     document.body.addEventListener("touchend", geneticAlgorithm);
-    setTimeout(geneticAlgorithm, 600);
-}
-
-// Test
-function __console_tests() {
-    var blanketColors = [
-        createHSL(154.29, 25.93, 73.53), // opal
-        createHSL(167.5, 19.05, 50.59), // gumbo
-        createHSL(160, 18, 19.61), // celtic
-    ];
-    var t;
-
-    console.log("...");
-
-    t = blanketColors[0]; // Opal
-    console.log("Hue should be 154.29", t.hue());
-    console.log("Sat should be 25.93", t.saturation());
-    console.log("Lightness should be 73.53", t.lightness());
-    console.log("toString()", t.toString());  
-
-    console.log("...");
-
-    tc = blanketColors[0];
-    t = createPanel({ color: tc });
-    console.log("Color should be " + tc.toString(), t.color());
-
-    console.log("...");
+    setTimeout(geneticAlgorithm, 80);
 }
