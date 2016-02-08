@@ -60,3 +60,9 @@ Abstract the genetic algorithm into an object that contains both the state of th
 
 ## :wave: Hey! Get in touch!
 I'd love to talk to someone about how to construct a/some fitness function(s) for this here algorithm.
+
+## The spark list
+A collection of links to influential stuff and things.
+
+* [Color scheme theory](http://www.tigercolor.com/color-lab/color-theory/color-harmonies.htm)
+* [Color Schemer](https://twitter.com/colorschemez) (Twitter Bot)
