@@ -343,7 +343,7 @@ function __browser_tests() {
     document.body.addEventListener("click", interactionHandler);
     document.body.addEventListener("touchend", interactionHandler);
 
-    function interactionHandler() {
+    function interactionHandler(event) {
         event.stopPropagation();
         event.preventDefault();
         geneticAlgorithm();
