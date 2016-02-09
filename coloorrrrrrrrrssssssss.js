@@ -340,7 +340,14 @@ else __browser_tests();
 
 
 function __browser_tests() {
-    document.body.addEventListener("click", geneticAlgorithm);
-    document.body.addEventListener("touchend", geneticAlgorithm);
+    document.body.addEventListener("click", interactionHandler);
+    document.body.addEventListener("touchend", interactionHandler);
+
+    function interactionHandler() {
+        event.stopPropagation();
+        event.preventDefault();
+        geneticAlgorithm();
+    }
+
     setTimeout(geneticAlgorithm, 80);
 }
