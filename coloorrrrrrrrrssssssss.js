@@ -211,7 +211,7 @@ function geneticAlgorithm() {
 
     function evolve(state) {
         var LOOP_COUNT = 0;
-        var MAX_LOOPS = 123;
+        var MAX_LOOPS = 400; // what if this grew with the number of taps?? that way more taps => better colors :D 
         while (!isSteady(state) && !(LOOP_COUNT >= MAX_LOOPS)) {
 
             // breed top six
@@ -296,19 +296,13 @@ function geneticAlgorithm() {
             lightnessRange = [5, 95],
             saturationRange = [5, 100];
 
-        if ([c1.l(), c2.l()].some(isNotInRange(lightnessRange)))
+        if ([c1.l(), c2.l()].some(_isNotInRange(lightnessRange)))
             lightnessMultiplier = 0;
 
-        if ([c1.s(), c2.s()].some(isNotInRange(saturationRange)))            
+        if ([c1.s(), c2.s()].some(_isNotInRange(saturationRange)))            
             saturationMultiplier = 0;
 
         return minSquaredAngle * lightnessMultiplier * saturationMultiplier;
-    }
-
-    function isNotInRange(range) {
-        return function(n) {
-            return n < range[0] || n > range[1];            
-        };
     }
 
     function isSteady(state) {
@@ -327,6 +321,12 @@ function geneticAlgorithm() {
 
     function printDummyMethodWarning(message) {
         console.log("[Warning] %c" + message, "color: deeppink; font-weight: 700; font-size: 135%;");
+    }
+
+    function _isNotInRange(range) {
+        return function(n) {
+            return n < range[0] || n > range[1];            
+        };
     }
 }
 

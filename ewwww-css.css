@@ -1,0 +1,82 @@
+html, body {
+  background: #fcfcfc;
+  color: #222;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+}
+
+header {
+  background: rgba(240, 240, 240, 1);
+  box-shadow: inset 0 -1px 2px 0 #bbb, inset 0 1px 2px 0 #bbb, inset 1px 0 2px 0 #bbb, inset -1px 0 2px 0 #bbb;
+
+  box-sizing: border-box;
+
+  font-family: "Gill Sans", sans-serif;
+
+  padding: 1.8em 3em 2.7em;
+  margin-top: -4em;
+  min-height: 6em;
+
+  text-align: center;
+
+  z-index: 1;
+}
+
+header h1 {
+  font-weight: 600;
+  letter-spacing: .01em;
+  margin: .25em;
+}
+
+header p {
+  color: #464646;
+  font-weight: 300;
+  margin: 0;
+}
+
+header p b {
+  color: #363636;
+  display: block;
+  font-size: 108%;
+  font-weight: 600;
+  margin: .2em 0 .4em 0;
+}
+
+main {
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  top: 0; left: 0;
+  z-index: 1;
+}
+
+ul {
+  display: flex;
+  justify-content: space-between;
+
+  margin: 0;
+  padding: 0;
+
+  height: 100%;
+  width: 100%;
+
+  position absolute;
+  left: 0;
+  top: 0;
+}
+
+li {
+  list-style-type: none;
+  width: 50%;
+  margin: 0;
+  padding: 0;
+}
+
+.emoji {
+  font-weight: 400;
+}
