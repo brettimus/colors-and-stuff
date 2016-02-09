@@ -18,7 +18,7 @@ header {
   box-sizing: border-box;
 
   font-family: "Gill Sans", sans-serif;
-  font-size: 91%;
+  font-size: 79%;
   padding: 1.8em 3em 2.7em;
   min-height: 6em;
 
@@ -45,7 +45,7 @@ header p {
   color: #464646;
   font-weight: 300;
   margin: 0 auto;
-  max-width: 20em;
+  max-width: 26rem;
 }
 
 header p b {
