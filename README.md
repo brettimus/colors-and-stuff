@@ -1,9 +1,12 @@
-# :bug: :heavy_plus_sign: :art:
-I had a bug to do something with colors recently. 
+# Is this :art:?
+**[View the demo!](http://brettim.us/genetic-colors/)**
 
-The lofty goal is to use a genetic algorithm to create aesthetically pleasing color palettes. (At present, we only evolve two complementary colors.)
+> Let's use a genetic algorithm to find complementary colors!
+> 
+> _Why?_
+> 
+> :no_mouth:
 
-**Curiousity piqued?** _[View the demo!](http://brettim.us/genetic-colors/)_
 
 ## The Algorithm
 
@@ -16,37 +19,42 @@ The lofty goal is to use a genetic algorithm to create aesthetically pleasing co
 7. Repeat steps 2-6 until the steady state is reached
 
 ### The Current Implementation
-* Each color is represented by its hue, saturation, and lightness
 * Each palette is composed of two colors
-* The fitness is equal to the minimum squared angle between two hues (effectively selecting complementary colors)
-* There is no steady state, but the algorithm terminates after 123 loops
+* The fitness function prefers complementary colors
+* The algorithm terminates after 400 loops (_There is no steady state!_)
 
 ### The Breeding
-**:disappointed: Needs improvement!** 
+**Needs improvement! :disappointed:** 
 
 Breeding two palettes means that each color from one palette has its hue, saturation, and lightness mixed with a color from the other palette.
 
 (The `createPalette` constructor has a static `#mix` method, which in turn uses the `#mix` method on `createColor`.)
 
 ### The Mutation
-**:disappointed: Needs improvement!** 
+**Needs improvement! :disappointed:** 
 
 Right now, mutation simply generates a new, random palette. Clearly, this could use some more thought.
 
 (The `createPalette` construction has a static `#random` method, which uses the `#random` method on `createColor`.)
 
-### The Fitness :muscle:
-Fitness is calculated as the minimum squared angle between two hues, which makes our algorithm evolve towards complementary colors. 
+### The Fitness 
+The :muscle: fitness of a palette is a function of its colors's hues, saturations, and lightnesses. Specifically,
+
+* The fitness is 0 if either color is too light or too dark
+* The fitness is 0 if either color is too unsaturated
+* Otherwise, the fitness is the minimum squared angle between the two hues
 
 ### The Steady State
-:warning: **Todo** :warning:
+**Todo** :warning:
 
-This just returns `false` right now :grin:.
+This just returns `false` right now.
 
-### The Visualization of The Algorithm
+Oops. :grin:
+
+### The Visualization of The Algorithm :bar_chart:
 Currently, we only visualize the “most fit” palette once the algorithm is finished.
 
-I would really love to visualize the evolution of a color palette. I have two ideas on how to do this (listed below). I am more partial to trying Idea 1 first, and then possibly incorporating the idea of `#tick` method later. Now I'm just rambling. :coffee:
+I would really love to visualize the evolution of a color palette. I have two ideas on how to do this. (I am more partial to the first.)
 
 #### Idea 1: A state queue
 Keep a record (probs a queue) of the algorithm's state at the beginning of its main loop.
@@ -59,9 +67,9 @@ Asynchronously step through genetic algorithm.
 Abstract the genetic algorithm into an object that contains both the state of the algorithm and a `#tick`-like method (which simply runs through steps 2-6 of the algorithm). Then, we can space out each `tick` by a set amount of time, and we visualize the state of the algorithm after each call to `tick`. 
 
 ## :wave: Hey! Get in touch!
-I'd love to talk to someone about how to construct a/some fitness function(s) for this here algorithm.
+I'd love to talk to someone about how to construct some alternative fitness functions for this here algorithm.
 
-## The spark list
+## :sparkles: The spark list
 A collection of links to influential stuff and things.
 
 * [Color scheme theory](http://www.tigercolor.com/color-lab/color-theory/color-harmonies.htm)
