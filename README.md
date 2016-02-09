@@ -1,5 +1,4 @@
 # Is this :art:?
-**[View the demo!](http://brettim.us/genetic-colors/)**
 
 > Let's use a genetic algorithm to find complementary colors!
 > 
@@ -7,6 +6,7 @@
 > 
 > :no_mouth:
 
+**[View the demo!](http://brettim.us/genetic-colors/)**
 
 ## The Algorithm
 
@@ -24,18 +24,14 @@
 * The algorithm terminates after 400 loops (_There is no steady state!_)
 
 ### The Breeding
-**Needs improvement! :disappointed:** 
+_Needs improvement! :disappointed:_
 
 Breeding two palettes means that each color from one palette has its hue, saturation, and lightness mixed with a color from the other palette.
 
-(The `createPalette` constructor has a static `#mix` method, which in turn uses the `#mix` method on `createColor`.)
-
 ### The Mutation
-**Needs improvement! :disappointed:** 
+_Needs improvement! :disappointed:_
 
 Right now, mutation simply generates a new, random palette. Clearly, this could use some more thought.
-
-(The `createPalette` construction has a static `#random` method, which uses the `#random` method on `createColor`.)
 
 ### The Fitness 
 The :muscle: fitness of a palette is a function of its colors's hues, saturations, and lightnesses. Specifically,
@@ -51,7 +47,7 @@ This just returns `false` right now.
 
 Oops. :grin:
 
-### The Visualization of The Algorithm :bar_chart:
+### The Visualization of The Algorithm
 Currently, we only visualize the “most fit” palette once the algorithm is finished.
 
 I would really love to visualize the evolution of a color palette. I have two ideas on how to do this. (I am more partial to the first.)
@@ -74,3 +70,4 @@ A collection of links to influential stuff and things.
 
 * [Color scheme theory](http://www.tigercolor.com/color-lab/color-theory/color-harmonies.htm)
 * [Color Schemer](https://twitter.com/colorschemez) (Twitter Bot)
+* [Chroma](https://github.com/gka/chroma.js)
