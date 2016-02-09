@@ -1,6 +1,7 @@
 html, body {
   background: #fcfcfc;
   color: #222;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -12,19 +13,26 @@ html, body {
 
 header {
   background: rgba(240, 240, 240, 1);
-  box-shadow: inset 0 -1px 2px 0 #bbb, inset 0 1px 2px 0 #bbb, inset 1px 0 2px 0 #bbb, inset -1px 0 2px 0 #bbb;
+  box-shadow: inset 0 -1px 2px 0 #bbb, inset 0 1px 2px 0 #bbb, inset 2px 0 2px 0 #bbb, inset -2px 0 2px 0 #bbb;
 
   box-sizing: border-box;
 
   font-family: "Gill Sans", sans-serif;
-
+  font-size: 91%;
   padding: 1.8em 3em 2.7em;
-  margin-top: -4em;
   min-height: 6em;
 
   text-align: center;
 
+  position: fixed;
+  top: 0; left: 0;
+
+  max-width: 600px;
+  width: 100%;
+
   z-index: 1;
+
+  transition: all 1s;
 }
 
 header h1 {
@@ -36,7 +44,8 @@ header h1 {
 header p {
   color: #464646;
   font-weight: 300;
-  margin: 0;
+  margin: 0 auto;
+  max-width: 20em;
 }
 
 header p b {
@@ -44,7 +53,7 @@ header p b {
   display: block;
   font-size: 108%;
   font-weight: 600;
-  margin: .2em 0 .4em 0;
+  margin: .2em 0 .25em 0;
 }
 
 main {
@@ -79,4 +88,15 @@ li {
 
 .emoji {
   font-weight: 400;
+}
+
+@media only screen and (min-width: 600px) {
+  header {
+    font-size: 100%;
+    margin-top: -4em;
+    min-height: 6em;
+    padding: 1.8em 3em 2.7em;
+    position: static;
+    width: auto;
+  }
 }
