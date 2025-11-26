@@ -6,7 +6,7 @@
 > 
 > :no_mouth:
 
-**[View the demo!](http://brettim.us/genetic-colors/)**
+**[View the demo!](https://colors-and-stuff.netlify.app/)**
 
 ## The Algorithm
 
